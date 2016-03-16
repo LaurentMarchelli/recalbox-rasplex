@@ -1,0 +1,35 @@
+choice
+    prompt "Target Architecture"
+    default BR2_rpi2
+    help
+      Select the target architecture family to build for.
+      
+config BR2_rpi1
+    bool "RASPBERRY PI 1 MODEL B+"
+    help
+      The Model B+ is the final revision of the original Raspberry Pi.
+      It replaced the Model B in July 2014 and was superseded by the 
+      Raspberry Pi 2 Model B in February 2015.
+      Is has a 700MHz ARM 11 CPU and 512MB RAM.
+
+config BR2_rpi2
+    bool "RASPBERRY PI 2 MODEL B"
+    help
+      The Raspberry Pi 2 Model B is the second generation Raspberry Pi. 
+      It replaced the original Raspberry Pi 1 Model B+ in February 2015. 
+      Is has a 900MHz quad-core ARM Cortex-A7 CPU and 1GB RAM.
+      
+config BR2_rpi3
+    bool "RASPBERRY PI 3 MODEL B"
+    help
+      The Raspberry Pi 3 is the third generation Raspberry Pi. 
+      It replaced the Raspberry Pi 2 Model B in February 2016. 
+      It has a 1.2GHz 64-bit quad-core ARMv8 CPU and 1GB RAM.
+
+endchoice
+
+config BR2_ARCH
+    string
+    default "rpi1" if BR2_rpi1
+    default "rpi2" if BR2_rpi2
+    default "rpi3" if BR2_rpi3

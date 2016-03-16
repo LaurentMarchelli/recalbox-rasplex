@@ -696,21 +696,21 @@ endmenu
 
 endmenu
 
-source "toolchain/Config.in"
+#source "toolchain/Config.in"
 
-source "system/Config.in"
+#source "system/Config.in"
 
-source "linux/Config.in"
+#source "linux/Config.in"
 
 source "package/Config.in"
 
-source "fs/Config.in"
+#source "fs/Config.in"
 
-source "boot/Config.in"
+#source "boot/Config.in"
 
-source "package/Config.in.host"
+#source "package/Config.in.host"
 
-source "Config.in.legacy"
+#source "Config.in.legacy"
 
 menu "User-provided options"
 	depends on BR2_EXTERNAL != "support/dummy-external"

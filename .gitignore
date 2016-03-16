@@ -1,0 +1,4 @@
+/dl/
+/output/
+.config*
+..config.tmp

@@ -1,0 +1,10 @@
+config BR2_PACKAGE_RECALBOXOS
+    bool "RecalboxOS"
+    default y
+    help
+      RecalboxOS is a light embedded system created to run on Raspberry Pi
+      and Raspberry Pi 2.
+      You can transform your rpi in an emulation platform, supporting up to
+      32 systems !
+
+      http://www.recalbox.com

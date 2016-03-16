@@ -1,0 +1,20 @@
+{
+  "partitions": [
+    {
+      "label":                     "PLEXBOOT",
+      "filesystem_type":           "FAT",
+      "partition_size_nominal":    160,
+      "want_maximised":            false,
+      "uncompressed_tarball_size": 131,
+      "mkfs_options":              ""
+    },
+    {
+      "label":                     "PLEXDATA",
+      "filesystem_type":           "ext4",
+      "partition_size_nominal":    864,
+      "want_maximised":            false,
+      "uncompressed_tarball_size": 1,
+      "mkfs_options":              ""
+    }
+  ]
+}

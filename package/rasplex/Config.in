@@ -1,0 +1,9 @@
+config BR2_PACKAGE_RASPLEX
+    bool "Rasplex"
+    default y
+    help
+      The Plex Home Theater port for the Raspberry Pi mini computer.
+      Created from Plex Home Theater and OpenELEC Linux, with automatic 
+      updates pushed out as they become available.
+
+      http://www.rasplex.com

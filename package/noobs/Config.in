@@ -1,0 +1,9 @@
+config BR2_PACKAGE_NOOBS
+    bool "Noobs"
+    default y
+    help
+      NOOBS is an easy operating system installer which contains Raspbian. 
+      It also provides a selection of alternative operating systems which 
+      are then downloaded from the internet and installed.
+
+      https://www.raspberrypi.org/downloads/noobs/

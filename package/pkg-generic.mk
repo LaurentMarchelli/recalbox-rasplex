@@ -490,14 +490,14 @@ ifeq ($(4),host)
 $(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
 	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
 endif
-ifeq ($(4),target)
-ifneq ($(1),skeleton)
-$(2)_DEPENDENCIES += skeleton
-endif
-ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
-$(2)_DEPENDENCIES += toolchain
-endif
-endif
+#ifeq ($(4),target)
+#ifneq ($(1),skeleton)
+#$(2)_DEPENDENCIES += skeleton
+#endif
+#ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
+#$(2)_DEPENDENCIES += toolchain
+#endif
+#endif
 
 # Eliminate duplicates in dependencies
 $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))

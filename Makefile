@@ -426,14 +426,14 @@ all: world
 # Include legacy before the other things, because package .mk files
 # may rely on it.
 ifneq ($(BR2_DEPRECATED),y)
-include Makefile.legacy
+#include Makefile.legacy
 endif
 
 include package/Makefile.in
 include support/dependencies/dependencies.mk
 
-include toolchain/*.mk
-include toolchain/*/*.mk
+#include toolchain/*.mk
+#include toolchain/*/*.mk
 
 # Include the package override file if one has been provided in the
 # configuration.
@@ -444,9 +444,9 @@ endif
 
 include $(sort $(wildcard package/*/*.mk))
 
-include boot/common.mk
-include linux/linux.mk
-include fs/common.mk
+#include boot/common.mk
+#include linux/linux.mk
+#include fs/common.mk
 
 include $(BR2_EXTERNAL)/external.mk
 
@@ -601,57 +601,57 @@ endif
 $(TARGETS_ROOTFS): target-finalize
 
 target-finalize: $(PACKAGES)
-	@$(call MESSAGE,"Finalizing target directory")
-	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
-	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
-		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
-	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
-	find $(TARGET_DIR)/lib $(TARGET_DIR)/usr/lib $(TARGET_DIR)/usr/libexec \
-		\( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
-ifneq ($(BR2_PACKAGE_GDB),y)
-	rm -rf $(TARGET_DIR)/usr/share/gdb
-endif
-ifneq ($(BR2_PACKAGE_BASH),y)
-	rm -rf $(TARGET_DIR)/usr/share/bash-completion
-endif
-ifneq ($(BR2_PACKAGE_ZSH),y)
-	rm -rf $(TARGET_DIR)/usr/share/zsh
-endif
-	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
-	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
-	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
-	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
-	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
-	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
-	if test -d $(TARGET_DIR)/lib/modules; then \
-		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' -print0 | \
-		xargs -0 -r $(KSTRIPCMD); fi
-
+#	@$(call MESSAGE,"Finalizing target directory")
+#	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+#	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+#		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+#		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
+#	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+#	find $(TARGET_DIR)/lib $(TARGET_DIR)/usr/lib $(TARGET_DIR)/usr/libexec \
+#		\( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+#ifneq ($(BR2_PACKAGE_GDB),y)
+#	rm -rf $(TARGET_DIR)/usr/share/gdb
+#endif
+#ifneq ($(BR2_PACKAGE_BASH),y)
+#	rm -rf $(TARGET_DIR)/usr/share/bash-completion
+#endif
+#ifneq ($(BR2_PACKAGE_ZSH),y)
+#	rm -rf $(TARGET_DIR)/usr/share/zsh
+#endif
+#	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
+#	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+#	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+#	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+#	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
+#	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+#	if test -d $(TARGET_DIR)/lib/modules; then \
+#		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' -print0 | \
+#		xargs -0 -r $(KSTRIPCMD); fi
+#
 # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
 # besides the one in which crash occurred; or SIGTRAP kills my program when
 # I set a breakpoint"
-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
-		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
-endif
-
+#ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+#	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
+#		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+#endif
+#
 # Valgrind needs ld.so with enough information, so only strip
 # debugging symbols.
-	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
-		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
-	test -f $(TARGET_DIR)/etc/ld.so.conf && \
-		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
-	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
-		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
-	mkdir -p $(TARGET_DIR)/etc
-	( \
-		echo "NAME=Buildroot"; \
-		echo "VERSION=$(BR2_VERSION_FULL)"; \
-		echo "ID=buildroot"; \
-		echo "VERSION_ID=$(BR2_VERSION)"; \
-		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
-	) >  $(TARGET_DIR)/etc/os-release
+#	find $(TARGET_DIR)/lib -type f -name 'ld-*.so*' | \
+#		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+#	test -f $(TARGET_DIR)/etc/ld.so.conf && \
+#		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+#	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
+#		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
+#	mkdir -p $(TARGET_DIR)/etc
+#	( \
+#		echo "NAME=Buildroot"; \
+#		echo "VERSION=$(BR2_VERSION_FULL)"; \
+#		echo "ID=buildroot"; \
+#		echo "VERSION_ID=$(BR2_VERSION)"; \
+#		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
+#	) >  $(TARGET_DIR)/etc/os-release
 
 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
 		$(call MESSAGE,"Copying overlay $(d)"); \
