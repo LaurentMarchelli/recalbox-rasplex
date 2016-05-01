@@ -27,7 +27,8 @@ define RECALBOXOS_BUILD_CMDS
 	@if test -d $(RECALBOXOS_TRG_BUILD); then \
 		rm -rf $(RECALBOXOS_TRG_BUILD); \
 	fi; \
-	cp -r $(RECALBOXOS_SRC_BUILD) $(RECALBOXOS_TRG_BUILD); \
+	mkdir -p $(RECALBOXOS_TRG_BUILD); \
+	cp -r $(RECALBOXOS_SRC_BUILD)/* $(RECALBOXOS_TRG_BUILD)/; \
 	mv $(RECALBOXOS_TRG_BUILD)/$(RECALBOXOS_NAME)-$(BR2_ARCH).png \
 		$(RECALBOXOS_TRG_BUILD)/$(RECALBOXOS_NAME).png; \
 	$(SED) "s|^\(\s*\)\"name\": \"$(RECALBOXOS_NAME)-$(BR2_ARCH)\",.*|\1\"name\": \"$(RECALBOXOS_NAME)\",|g" \
