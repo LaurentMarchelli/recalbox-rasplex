@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-RECALBOXOS_VERSION = 4.0.0-beta3
+RECALBOXOS_VERSION = 4.0.0-beta5
 RECALBOXOS_SOURCE = $(RECALBOXOS_NAME)-$(RECALBOXOS_VERSION).zip
 RECALBOXOS_SITE = https://github.com/recalbox/recalbox-os/releases/download/$(RECALBOXOS_VERSION)
 

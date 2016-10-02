@@ -7,9 +7,9 @@ The aim of recalbox-rasplex is to produce a NOOBS distribution able to automatic
 Recalbox-rasplex is a hack of Buildroot (https://buildroot.org/) using its scripts to download, expand and configure existing system images for your hardware configuration. Unlike BuildRoot it does not build any system from sources, but get released images from NOOBS, Recalbox-OS and Rasplex update sites.
 
 ## Current version
-- Noobs v1.7.0
-- Recalbox-OS v4.0.0-beta3
-- Rasplex v1.0.3
+- Noobs v1.9.3
+- Recalbox-OS v4.0.0-beta5
+- Rasplex v1.6.2
 
 ## System requirements
 Because recalbox-rasplex is made on Buildroot, it is designed to run on Linux Systems.

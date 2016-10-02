@@ -4,11 +4,11 @@
 #
 ################################################################################
 
-RASPLEX_RELEASE = 1.0.3
+RASPLEX_RELEASE = 1.6.2
 ifeq ($(BR2_ARCH),"rpi1")
-	RASPLEX_VERSION = RPi.RP-$(RASPLEX_RELEASE)
+	RASPLEX_VERSION = $(RASPLEX_RELEASE).123-e23a7eef-RPi.arm
 else
-	RASPLEX_VERSION = RPi2.RP-$(RASPLEX_RELEASE)
+	RASPLEX_VERSION = $(RASPLEX_RELEASE).123-e23a7eef-RPi2.arm
 endif
 RASPLEX_SOURCE = RasPlex-$(RASPLEX_VERSION).tar.gz
 RASPLEX_SITE = https://github.com/RasPlex/RasPlex/releases/download/$(RASPLEX_RELEASE)
