@@ -1,0 +1,1 @@
+../.buildroot/package/pkg-autotools.mk
