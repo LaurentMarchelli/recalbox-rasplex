@@ -8,7 +8,10 @@ Recalbox-rasplex is a hack of Buildroot (https://buildroot.org/) using its scrip
 
 ## Current version
 - Noobs v1.9.3
-- Recalbox-OS v4.0.0-beta5
+- Recalbox-OS (one of following)
+  - v4.0.0-beta5 (default)
+  - v4.0 last unstable build
+  - v4.1 last unstable build
 - Rasplex v1.6.2
 
 ## System requirements
@@ -35,19 +38,27 @@ make menuconfig
 - RASPBERRY PI 2 MODEL B
 - RASPBERRY PI 3 MODEL B
 ```
-5 - Select further available options
+5 - Select your Recalbox Version
+```
+- Version 4.0 - Stable
+- Version 4.0 - Unstable
+- Version 4.1 - Unstable
+- None
+```
 
-6 - Build NOOBS needed files
+6 - Select further available options
+
+7 - Build NOOBS needed files
 ```bash
 make
 ```
-7 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
+8 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
 
-8 - Copy the content of the ./output/target directory into your SD-Card
+9 - Copy the content of the ./output/target directory into your SD-Card
 
-9 - Insert the SD-Card into the Raspberry Pi
+10 - Insert the SD-Card into the Raspberry Pi
 
-10 - Boot and select NOOBS options.
+11 - Boot and select NOOBS options.
 
 https://github.com/raspberrypi/noobs
 
