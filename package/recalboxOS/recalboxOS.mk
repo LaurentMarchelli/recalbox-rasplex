@@ -4,9 +4,23 @@
 #
 ################################################################################
 
-RECALBOXOS_VERSION = 4.0.0-beta5
-RECALBOXOS_SOURCE = $(RECALBOXOS_NAME)-$(RECALBOXOS_VERSION).zip
-RECALBOXOS_SITE = https://github.com/recalbox/recalbox-os/releases/download/$(RECALBOXOS_VERSION)
+RECALBOXOS_RELEASE = 4.0.0-beta5
+RECALBOXOS_SOURCE = $(RECALBOXOS_NAME)-$(RECALBOXOS_RELEASE).zip
+RECALBOXOS_SITE = https://github.com/recalbox/recalbox-os/releases/download/$(RECALBOXOS_RELEASE)
+
+ifeq ($(BR2_PACKAGE_RECALBOXOS_UNSTABLE),y)
+	RECALBOXOS_VERSION = 4.0-unstable
+	RECALBOXOS_EXTRA_DOWNLOADS = \
+		http://archive.recalbox.com/4/$(BR2_ARCH)/unstable/last/boot.tar.xz \
+		http://archive.recalbox.com/4/$(BR2_ARCH)/unstable/last/root.tar.xz
+else ifeq ($(BR2_PACKAGE_RECALBOXOS_NEXT),y)
+	RECALBOXOS_VERSION = 4.1-unstable
+	RECALBOXOS_EXTRA_DOWNLOADS = \
+		http://archive.recalbox.com/4.1/$(BR2_ARCH)/unstable/last/boot.tar.xz \
+		http://archive.recalbox.com/4.1/$(BR2_ARCH)/unstable/last/root.tar.xz
+else
+	RECALBOXOS_VERSION = $(RECALBOXOS_RELEASE)
+endif
 
 ifeq ($(BR2_PACKAGE_NOOBS),y)
 	RECALBOXOS_DEPENDENCIES=noobs
@@ -16,12 +30,18 @@ else
 	RECALBOXOS_INSTALL_NOOBS=NOOBS_INSTALL_TARGET_CMDS
 endif
 
-define RECALBOXOS_EXTRACT_CMDS
-	@unzip -q -o $(DL_DIR)/$(RECALBOXOS_SOURCE) -d $(@D)
-endef
-
 RECALBOXOS_SRC_BUILD=$(@D)/os/$(RECALBOXOS_NAME)-$(BR2_ARCH)
 RECALBOXOS_TRG_BUILD=$(@D)/os/$(RECALBOXOS_NAME)
+
+define RECALBOXOS_EXTRACT_CMDS
+	@unzip -q -o $(DL_DIR)/$(RECALBOXOS_SOURCE) -d $(@D); \
+	if test -e $(DL_DIR)/boot.tar.xz; then \
+		mv $(DL_DIR)/boot.tar.xz $(RECALBOXOS_SRC_BUILD)/; \
+	fi; \
+	if test -e $(DL_DIR)/root.tar.xz; then \
+		mv $(DL_DIR)/root.tar.xz $(RECALBOXOS_SRC_BUILD)/; \
+	fi;
+endef
 
 define RECALBOXOS_BUILD_CMDS
 	@if test -d $(RECALBOXOS_TRG_BUILD); then \
