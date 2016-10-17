@@ -35,11 +35,17 @@ define RASPLEX_PRE_BUILD_CMDS
 	cp -r $(@D)/3rdparty/bootloader/* $(RASPLEX_TAR_BUILD)/plexboot; \
 	cp $(@D)/target/SYSTEM $(RASPLEX_TAR_BUILD)/plexboot/SYSTEM; \
 	cp $(@D)/target/KERNEL $(RASPLEX_TAR_BUILD)/plexboot/kernel.img; \
-	mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/lost+found;
+	mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/backup;
 endef
 
 # Add configuration specifics to rasplex partitions
 define RASPLEX_BUILD_CMDS
+	mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.cache/services; \
+	if [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2013)' ==  'y' ]; then \
+		echo BOARD_VERSION=\"2013\" > $(RASPLEX_TAR_BUILD)/plexdata/.cache/services/remotepi-board.conf; \
+	elif [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2015)' ==  'y' ]; then \
+		echo BOARD_VERSION=\"2015\" > $(RASPLEX_TAR_BUILD)/plexdata/.cache/services/remotepi-board.conf; \
+	fi;
 endef
 
 # Compress partitions into tar.xz

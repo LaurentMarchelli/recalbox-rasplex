@@ -1,26 +1,26 @@
 choice
     prompt "Target Architecture"
-    default BR2_rpi2
+    default BR2_ARCH_RPI2
     help
       Select the target architecture family to build for.
       
-config BR2_rpi1
-    bool "RASPBERRY PI 1 MODEL B+"
+config BR2_ARCH_RPI1
+    bool "Raspberry Pi 1 Model B+"
     help
       The Model B+ is the final revision of the original Raspberry Pi.
       It replaced the Model B in July 2014 and was superseded by the 
       Raspberry Pi 2 Model B in February 2015.
       Is has a 700MHz ARM 11 CPU and 512MB RAM.
 
-config BR2_rpi2
-    bool "RASPBERRY PI 2 MODEL B"
+config BR2_ARCH_RPI2
+    bool "Raspberry Pi 2 Model B"
     help
       The Raspberry Pi 2 Model B is the second generation Raspberry Pi. 
       It replaced the original Raspberry Pi 1 Model B+ in February 2015. 
       Is has a 900MHz quad-core ARM Cortex-A7 CPU and 1GB RAM.
       
-config BR2_rpi3
-    bool "RASPBERRY PI 3 MODEL B"
+config BR2_ARCH_RPI3
+    bool "Raspberry Pi 3 Model B"
     help
       The Raspberry Pi 3 is the third generation Raspberry Pi. 
       It replaced the Raspberry Pi 2 Model B in February 2016. 
@@ -30,6 +30,39 @@ endchoice
 
 config BR2_ARCH
     string
-    default "rpi1" if BR2_rpi1
-    default "rpi2" if BR2_rpi2
-    default "rpi3" if BR2_rpi3
+    default "rpi1" if BR2_ARCH_RPI1
+    default "rpi2" if BR2_ARCH_RPI2
+    default "rpi3" if BR2_ARCH_RPI3
+
+choice
+    prompt "Powerswitch Hardware"
+    default BR2_ARCH_POWERSWITCH_REMOTEPI_2015
+    
+config BR2_ARCH_POWERSWITCH_NONE
+    bool "None"
+    help
+      Select this option if your powerswitch cannot be selected in the 
+      list.
+
+config BR2_ARCH_POWERSWITCH_REMOTEPI_2013
+    bool "RemotePi Board 2013"
+    help
+        The RemotePi Board is an intelligent infrared remote controlled 
+        power switch for the Raspberry Pi. 
+        It is mainly intended to remote control and power off/on a media 
+        center system (i.e LibreELEC, OpenELEC, OSMC, XBian, RasPlex, 
+        Raspbian, Volumio, ...).
+        http://www.msldigital.com/pages/support-for-remotepi-board-2013
+
+config BR2_ARCH_POWERSWITCH_REMOTEPI_2015
+    bool "RemotePi Board for Pi3, Pi 2 and B+"
+    help
+        The RemotePi Board is an intelligent infrared remote controlled 
+        power switch for the Raspberry Pi. 
+        It is mainly intended to remote control and power off/on a media 
+        center system (i.e LibreELEC, OpenELEC, OSMC, XBian, RasPlex, 
+        Raspbian, Volumio, ...).
+        http://www.msldigital.com/pages/support-for-remotepi-board-plus-2015
+        
+
+endchoice
