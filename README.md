@@ -34,29 +34,36 @@ make menuconfig
 ```
 4 - Select your hardware (Target Architecture)
 ```
-- RASPBERRY PI 1 MODEL B+
-- RASPBERRY PI 2 MODEL B
-- RASPBERRY PI 3 MODEL B
+- Raspberry Pi 1 Model B+
+- Raspberry Pi 2 Model B
+- Raspberry Pi 3 Model B
 ```
-5 - Select your Recalbox Version
+5 - Select your Powerswitch hardware
+```
+- None
+- RemotePi Board 2013
+- RemotePi Board for Pi3, Pi 2 and B+
+```
+Further informations at http://www.msldigital.com/
+
+6 - Select your Recalbox Version
 ```
 - Version 4.0 - Stable
 - Version 4.0 - Unstable
 - Version 4.1 - Unstable
 - None
 ```
+7 - Select further available options
 
-6 - Select further available options
-
-7 - Build NOOBS needed files
+8 - Build NOOBS needed files
 ```bash
 make
 ```
-8 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
+9 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
 
-9 - Copy the content of the ./output/target directory into your SD-Card
+10 - Copy the content of the ./output/target directory into your SD-Card
 
-10 - Insert the SD-Card into the Raspberry Pi
+11 - Insert the SD-Card into the Raspberry Pi
 
 11 - Boot and select NOOBS options.
 
