@@ -1,6 +1,6 @@
-choice
-    prompt "RecalboxOS"
-    default BR2_PACKAGE_RECALBOXOS_STABLE
+config BR2_PACKAGE_RECALBOXOS
+    bool "RecalboxOS"
+    default y
     help
       RecalboxOS is a light embedded system created to run on Raspberry Pi
       Raspberry Pi 2 and Raspberry PI 3.
@@ -9,14 +9,22 @@ choice
 
       http://www.recalbox.com
 
+#####################################################################
+#                       Version Selector
+#####################################################################
+choice
+    prompt "Version"
+    default BR2_PACKAGE_RECALBOXOS_STABLE
+    depends on BR2_PACKAGE_RECALBOXOS
+
 config BR2_PACKAGE_RECALBOXOS_STABLE
-    bool "Version 4.0 - Stable"
+    bool "4.0 - Stable"
     help
       The last stable version from : 
       https://github.com/recalbox/recalbox-os/releases
 
 config BR2_PACKAGE_RECALBOXOS_UNSTABLE
-    bool "Version 4.0 - Unstable"
+    bool "4.0 - Unstable"
     help
       The last stable version from : 
       https://github.com/recalbox/recalbox-os/releases 
@@ -26,7 +34,7 @@ config BR2_PACKAGE_RECALBOXOS_UNSTABLE
       Try it at your own risks !!!
 
 config BR2_PACKAGE_RECALBOXOS_NEXT
-    bool "Version 4.1 - Unstable"
+    bool "4.1 - Unstable"
     help
       The last stable version from : 
       https://github.com/recalbox/recalbox-os/releases 
@@ -35,14 +43,4 @@ config BR2_PACKAGE_RECALBOXOS_NEXT
       
       Try it at your own risks !!!
 
-config BR2_PACKAGE_RECALBOXOS_NONE
-    bool "None"
-    help
-      Select this option if you don't want RecalboxOS on your NOOBS
-      distribution.
-
 endchoice
-
-config BR2_PACKAGE_RECALBOXOS
-    bool
-    default !BR2_PACKAGE_RECALBOXOS_NONE

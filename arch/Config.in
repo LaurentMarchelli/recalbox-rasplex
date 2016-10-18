@@ -37,12 +37,16 @@ config BR2_ARCH
 choice
     prompt "Powerswitch Hardware"
     default BR2_ARCH_POWERSWITCH_REMOTEPI_2015
-    
-config BR2_ARCH_POWERSWITCH_NONE
-    bool "None"
+
+config BR2_ARCH_POWERSWITCH_REMOTEPI_2015
+    bool "RemotePi Board for Pi3, Pi 2 and B+"
     help
-      Select this option if your powerswitch cannot be selected in the 
-      list.
+        The RemotePi Board is an intelligent infrared remote controlled 
+        power switch for the Raspberry Pi. 
+        It is mainly intended to remote control and power off/on a media 
+        center system (i.e LibreELEC, OpenELEC, OSMC, XBian, RasPlex, 
+        Raspbian, Volumio, ...).
+        http://www.msldigital.com/pages/support-for-remotepi-board-plus-2015
 
 config BR2_ARCH_POWERSWITCH_REMOTEPI_2013
     bool "RemotePi Board 2013"
@@ -54,15 +58,10 @@ config BR2_ARCH_POWERSWITCH_REMOTEPI_2013
         Raspbian, Volumio, ...).
         http://www.msldigital.com/pages/support-for-remotepi-board-2013
 
-config BR2_ARCH_POWERSWITCH_REMOTEPI_2015
-    bool "RemotePi Board for Pi3, Pi 2 and B+"
+config BR2_ARCH_POWERSWITCH_NONE
+    bool "None"
     help
-        The RemotePi Board is an intelligent infrared remote controlled 
-        power switch for the Raspberry Pi. 
-        It is mainly intended to remote control and power off/on a media 
-        center system (i.e LibreELEC, OpenELEC, OSMC, XBian, RasPlex, 
-        Raspbian, Volumio, ...).
-        http://www.msldigital.com/pages/support-for-remotepi-board-plus-2015
-        
+      Select this option if your powerswitch cannot be selected in the 
+      list.
 
 endchoice

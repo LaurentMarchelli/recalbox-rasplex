@@ -22,16 +22,10 @@ else
 	RECALBOXOS_VERSION = $(RECALBOXOS_RELEASE)
 endif
 
-ifeq ($(BR2_PACKAGE_NOOBS),y)
-	RECALBOXOS_DEPENDENCIES=noobs
-	RECALBOXOS_INSTALL_NOOBS=
-else
-	RECALBOXOS_DEPENDENCIES=
-	RECALBOXOS_INSTALL_NOOBS=NOOBS_INSTALL_TARGET_CMDS
-endif
-
+#####################################################################
+# 	EXTRACT : Extract base version and apply needed updates
+#####################################################################
 RECALBOXOS_SRC_BUILD=$(@D)/os/$(RECALBOXOS_NAME)-$(BR2_ARCH)
-RECALBOXOS_TRG_BUILD=$(@D)/os/$(RECALBOXOS_NAME)
 
 define RECALBOXOS_EXTRACT_CMDS
 	@unzip -q -o $(DL_DIR)/$(RECALBOXOS_SOURCE) -d $(@D); \
@@ -43,7 +37,15 @@ define RECALBOXOS_EXTRACT_CMDS
 	fi;
 endef
 
-define RECALBOXOS_BUILD_CMDS
+#####################################################################
+# 			PRE_BUILD : Prepare partition directories
+# 	$(@D)/os/rasplex      (Noobs configuration)
+# 	$(@D)/os/rasplex.dsk  (Partitions extracted)
+#####################################################################
+RECALBOXOS_TRG_BUILD=$(@D)/os/$(RECALBOXOS_NAME)
+RECALBOXOS_TAR_BUILD=$(RECALBOXOS_TRG_BUILD).dsk
+
+define RECALBOXOS_PRE_BUILD_CMDS
 	@if test -d $(RECALBOXOS_TRG_BUILD); then \
 		rm -rf $(RECALBOXOS_TRG_BUILD); \
 	fi; \
@@ -55,9 +57,64 @@ define RECALBOXOS_BUILD_CMDS
 		$(RECALBOXOS_TRG_BUILD)/os.json
 endef
 
+#####################################################################
+# 			BUILD : Customize partition directories
+#####################################################################
+# Powerswitch configuration
+define RECALBOXOS_BUILD_POWER_CMD
+endef
+
+# Boot configuration for skin
+define RECALBOXOS_BUILD_BOOT_TXT
+\n# create autoboot switch file for recalbox-rasplex\
+\nif [! -f /tmp/recalplex/recovery.img]; then\
+\n  mkdir -p /tmp/recalplex\
+\n  mount /dev/mmcblk0p1 /tmp/recalplex\
+\nfi\
+\necho boot_partition=\$$id1 > /tmp/recalplex/autoboot_recalbox.txt
+endef
+
+define RECALBOXOS_BUILD_SKIN_CMD
+	@if [ '$(BR2_RASPLEX_RECALBOXOS_SKIN_OPENPHT)' !=  'y' ]; then \
+		if [ '$(BR2_PACKAGE_RASPLEX)' ==  'y' ]; then \
+			echo -e "$(RECALBOXOS_BUILD_BOOT_TXT)" >> $(RECALBOXOS_TRG_BUILD)/partition_setup.sh; \
+		fi; \
+	fi;
+endef
+
+define RECALBOXOS_BUILD_CMDS
+	$(call RECALBOXOS_BUILD_POWER_CMD)
+	$(call RECALBOXOS_BUILD_SKIN_CMD)
+endef
+
+#####################################################################
+# 	POST_BUILD : Compress partitions directories into tar.xz
+#####################################################################
+define RECALBOXOS_POST_BUILD_CMDS
+	@for p in `ls -d $(RECALBOXOS_TAR_BUILD)/*/`; do \
+		pushd $$p > /dev/null; \
+		tar cfvJ $(RECALBOXOS_TRG_BUILD)/$$(basename $$p).tar.xz .; \
+		popd > /dev/null; \
+	done
+endef
+
+RECALBOXOS_PRE_BUILD_HOOKS += RECALBOXOS_PRE_BUILD_CMDS
+#RECALBOXOS_POST_BUILD_HOOKS += RECALBOXOS_POST_BUILD_CMDS
+
+#####################################################################
+# 	INSTALL : Copy the content of the $(RECALBOXOS_TRG_BUILD)
+#	          to the target/os/rasplex
+#####################################################################
+ifeq ($(BR2_PACKAGE_NOOBS),y)
+	RECALBOXOS_DEPENDENCIES=noobs
+	RECALBOXOS_INSTALL_NOOBS=
+else
+	RECALBOXOS_DEPENDENCIES=
+	RECALBOXOS_INSTALL_NOOBS=NOOBS_INSTALL_TARGET_CMDS
+endif
+
 RECALBOXOS_SRC_INSTALL=$(RECALBOXOS_TRG_BUILD)
 RECALBOXOS_TRG_INSTALL=$(TARGET_DIR)/os/$(RECALBOXOS_NAME)
-
 define RECALBOXOS_INSTALL_TARGET_CMDS
 	$(call $(RECALBOXOS_INSTALL_NOOBS))
 	@if test -d $(RECALBOXOS_TRG_INSTALL); then \
