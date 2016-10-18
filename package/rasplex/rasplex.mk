@@ -15,12 +15,14 @@ RASPLEX_SITE = https://github.com/RasPlex/RasPlex/releases/download/$(RASPLEX_RE
 RASPLEX_LICENSE = GPL2
 RASPLEX_LICENSE_FILES = COPYING
 
+#####################################################################
+# 			PRE_BUILD : Prepare partition directories
+# 	$(@D)/os/rasplex      (Noobs configuration)
+# 	$(@D)/os/rasplex.dsk  (Partitions extracted)
+#####################################################################
 RASPLEX_TRG_BUILD=$(@D)/os/$(RASPLEX_NAME)
 RASPLEX_TAR_BUILD=$(RASPLEX_TRG_BUILD).dsk
 
-# Prepare build directories :
-# $(@D)/os/rasplex      (Noobs configuration)
-# $(@D)/os/rasplex.dsk  (Partitions extracted)
 define RASPLEX_PRE_BUILD_CMDS
 	@if test -d $(RASPLEX_TRG_BUILD); then \
 		rm -rf $(RASPLEX_TRG_BUILD); \
@@ -38,26 +40,87 @@ define RASPLEX_PRE_BUILD_CMDS
 	mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/backup;
 endef
 
-# Add configuration specifics to rasplex partitions
-define RASPLEX_BUILD_CMDS
-	mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.cache/services; \
-	if [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2013)' ==  'y' ]; then \
-		echo BOARD_VERSION=\"2013\" > $(RASPLEX_TAR_BUILD)/plexdata/.cache/services/remotepi-board.conf; \
+#####################################################################
+# 			BUILD : Customize partition directories
+#####################################################################
+# Powerswitch configuration
+RASPLEX_POWER_PATH = $(RASPLEX_TAR_BUILD)/plexdata/.cache/services
+define RASPLEX_BUILD_POWER_CMD
+	@if [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2013)' ==  'y' ]; then \
+		mkdir -p $(RASPLEX_POWER_PATH); \
+		echo BOARD_VERSION=\"2013\" > $(RASPLEX_POWER_PATH)/remotepi-board.conf; \
 	elif [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2015)' ==  'y' ]; then \
-		echo BOARD_VERSION=\"2015\" > $(RASPLEX_TAR_BUILD)/plexdata/.cache/services/remotepi-board.conf; \
+		mkdir -p $(RASPLEX_POWER_PATH); \
+		echo BOARD_VERSION=\"2015\" > $(RASPLEX_POWER_PATH)/remotepi-board.conf; \
 	fi;
 endef
 
-# Compress partitions into tar.xz
+# Boot configuration for skin
+define RASPLEX_BUILD_BOOT_TXT
+\n# create autoboot switch file for recalbox-rasplex\
+\nif [! -f /tmp/recalplex/recovery.img]; then\
+\n  mkdir -p /tmp/recalplex\
+\n  mount /dev/mmcblk0p1 /tmp/recalplex\
+\nfi\
+\necho boot_partition=\$$id1 > /tmp/recalplex/autoboot_rasplex.txt
+endef
+
+# Skin configuration
+ifndef BR2_PACKAGE_RASPLEX_SKIN_OPENPHT
+	ifdef BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
+		RASPLEX_SKIN_NAME = skin.aeon.nox.5
+		RASPLEX_SKIN_VERSION = 5.2.3
+	endif
+	# URL information stored in /storage/.plexht/userdata/Database/Addons15.db
+	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.6
+	RASPLEX_SKIN_FILE = $(RASPLEX_SKIN_NAME)-$(RASPLEX_SKIN_VERSION).zip
+	RASPLEX_SKIN_PATH = $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons
+	RASPLEX_USER_PATH = $(RASPLEX_TAR_BUILD)/plexdata/.plexht/userdata
+	# Download skin if required by configuration
+	RASPLEX_EXTRA_DOWNLOADS = \
+		$(RASPLEX_SKIN_SITE)/$(RASPLEX_SKIN_NAME)/$(RASPLEX_SKIN_FILE)
+endif
+
+define RASPLEX_BUILD_SKIN_CMD
+	@if [ '$(BR2_PACKAGE_RASPLEX_SKIN_OPENPHT)' !=  'y' ]; then \
+		mkdir -p $(RASPLEX_SKIN_PATH)/; \
+		unzip -q -o $(DL_DIR)/$(RASPLEX_SKIN_FILE) -d $(RASPLEX_SKIN_PATH)/; \
+		if [ '$(BR2_PACKAGE_RECALBOXOS)' ==  'y' ]; then \
+			mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/; \
+			cp -r $(RASPLEX_PKGDIR)_resources/recalplex/* $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/; \
+			cp -r $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/addons/$(RASPLEX_SKIN_NAME)/* \
+				$(RASPLEX_SKIN_PATH)/$(RASPLEX_SKIN_NAME)/; \
+			mkdir -p $(RASPLEX_USER_PATH); \
+			cp -r $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/userdata/$(RASPLEX_SKIN_NAME)/* \
+				$(RASPLEX_USER_PATH)/; \
+			echo -e "$(RASPLEX_BUILD_BOOT_TXT)" >> $(RASPLEX_TRG_BUILD)/partition_setup.sh; \
+		fi; \
+	fi;
+endef
+
+define RASPLEX_BUILD_CMDS
+	$(call RASPLEX_BUILD_POWER_CMD)
+	$(call RASPLEX_BUILD_SKIN_CMD)
+endef
+
+#####################################################################
+# 	POST_BUILD : Compress partitions directories into tar.xz
+#####################################################################
 define RASPLEX_POST_BUILD_CMDS
 	@for p in `ls -d $(RASPLEX_TAR_BUILD)/*/`; do \
 		pushd $$p > /dev/null; \
-		tar cfvJ $(RASPLEX_TRG_BUILD)/$$(basename $$p).tar.xz *; \
+		tar cfvJ $(RASPLEX_TRG_BUILD)/$$(basename $$p).tar.xz .; \
 		popd > /dev/null; \
 	done
 endef
 
-# Copy the content of the $(RASPLEX_TRG_BUILD) to the target/os/rasplex
+RASPLEX_PRE_BUILD_HOOKS += RASPLEX_PRE_BUILD_CMDS
+RASPLEX_POST_BUILD_HOOKS += RASPLEX_POST_BUILD_CMDS
+
+#####################################################################
+# 	INSTALL : Copy the content of the $(RASPLEX_TRG_BUILD)
+#	          to the target/os/rasplex
+#####################################################################
 RASPLEX_SRC_INSTALL=$(RASPLEX_TRG_BUILD)
 RASPLEX_TRG_INSTALL=$(TARGET_DIR)/os/$(RASPLEX_NAME)
 define RASPLEX_INSTALL_TARGET_CMDS
@@ -65,10 +128,7 @@ define RASPLEX_INSTALL_TARGET_CMDS
 	@if test -d $(RASPLEX_TRG_INSTALL); then \
 		rm -rf $(RASPLEX_TRG_INSTALL); \
 	fi; \
-	cp -r $(RASPLEX_SRC_INSTALL) $(RASPLEX_TRG_INSTALL)
+	cp -r $(RASPLEX_SRC_INSTALL) $(RASPLEX_TRG_INSTALL);
 endef
-
-RASPLEX_PRE_BUILD_HOOKS += RASPLEX_PRE_BUILD_CMDS
-RASPLEX_POST_BUILD_HOOKS += RASPLEX_POST_BUILD_CMDS
 
 $(eval $(generic-package))
