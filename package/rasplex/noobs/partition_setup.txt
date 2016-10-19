@@ -1,0 +1,4 @@
+
+# create autoboot switch file for recalbox-rasplex\
+boot_num=$(echo "$part1" | sed -e "s|/dev/mmcblk0p\([0-9]*\).*$|\1|")
+echo boot_partition=$boot_num > /settings/autoboot_rasplex.txt

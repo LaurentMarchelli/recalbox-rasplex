@@ -24,19 +24,20 @@ RASPLEX_TRG_BUILD=$(@D)/os/$(RASPLEX_NAME)
 RASPLEX_TAR_BUILD=$(RASPLEX_TRG_BUILD).dsk
 
 define RASPLEX_PRE_BUILD_CMDS
-	@if test -d $(RASPLEX_TRG_BUILD); then \
+	if test -d $(RASPLEX_TRG_BUILD); then \
 		rm -rf $(RASPLEX_TRG_BUILD); \
 	fi; \
 	mkdir -p $(RASPLEX_TRG_BUILD); \
-	cp -r $(RASPLEX_PKGDIR)_resources/rpi/* $(RASPLEX_TRG_BUILD)/; \
-	cp -r $(RASPLEX_PKGDIR)_resources/$(BR2_ARCH)/* $(RASPLEX_TRG_BUILD)/; \
+	cp -r $(RASPLEX_PKGDIR)noobs/rpi/* $(RASPLEX_TRG_BUILD)/; \
+	cp -r $(RASPLEX_PKGDIR)noobs/$(BR2_ARCH)/* $(RASPLEX_TRG_BUILD)/; \
 	if test -d $(RASPLEX_TAR_BUILD); then \
 		rm -rf $(RASPLEX_TAR_BUILD); \
 	fi; \
 	mkdir -p $(RASPLEX_TAR_BUILD)/plexboot; \
 	cp -r $(@D)/3rdparty/bootloader/* $(RASPLEX_TAR_BUILD)/plexboot; \
-	cp $(@D)/target/SYSTEM $(RASPLEX_TAR_BUILD)/plexboot/SYSTEM; \
-	cp $(@D)/target/KERNEL $(RASPLEX_TAR_BUILD)/plexboot/kernel.img; \
+	cp $(@D)/target/* $(RASPLEX_TAR_BUILD)/plexboot/; \
+	mv $(RASPLEX_TAR_BUILD)/plexboot/KERNEL $(RASPLEX_TAR_BUILD)/plexboot/kernel.img; \
+	mv $(RASPLEX_TAR_BUILD)/plexboot/KERNEL.md5 $(RASPLEX_TAR_BUILD)/plexboot/kernel.img.md5; \
 	mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/backup;
 endef
 
@@ -46,23 +47,13 @@ endef
 # Powerswitch configuration
 RASPLEX_POWER_PATH = $(RASPLEX_TAR_BUILD)/plexdata/.cache/services
 define RASPLEX_BUILD_POWER_CMD
-	@if [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2013)' ==  'y' ]; then \
+	if [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2013)' ==  'y' ]; then \
 		mkdir -p $(RASPLEX_POWER_PATH); \
 		echo BOARD_VERSION=\"2013\" > $(RASPLEX_POWER_PATH)/remotepi-board.conf; \
 	elif [ '$(BR2_ARCH_POWERSWITCH_REMOTEPI_2015)' ==  'y' ]; then \
 		mkdir -p $(RASPLEX_POWER_PATH); \
 		echo BOARD_VERSION=\"2015\" > $(RASPLEX_POWER_PATH)/remotepi-board.conf; \
 	fi;
-endef
-
-# Boot configuration for skin
-define RASPLEX_BUILD_BOOT_TXT
-\n# create autoboot switch file for recalbox-rasplex\
-\nif [! -f /tmp/recalplex/recovery.img]; then\
-\n  mkdir -p /tmp/recalplex\
-\n  mount /dev/mmcblk0p1 /tmp/recalplex\
-\nfi\
-\necho boot_partition=\$$id1 > /tmp/recalplex/autoboot_rasplex.txt
 endef
 
 # Skin configuration
@@ -82,18 +73,18 @@ ifndef BR2_PACKAGE_RASPLEX_SKIN_OPENPHT
 endif
 
 define RASPLEX_BUILD_SKIN_CMD
-	@if [ '$(BR2_PACKAGE_RASPLEX_SKIN_OPENPHT)' !=  'y' ]; then \
+	if [ '$(BR2_PACKAGE_RASPLEX_SKIN_OPENPHT)' !=  'y' ]; then \
 		mkdir -p $(RASPLEX_SKIN_PATH)/; \
 		unzip -q -o $(DL_DIR)/$(RASPLEX_SKIN_FILE) -d $(RASPLEX_SKIN_PATH)/; \
 		if [ '$(BR2_PACKAGE_RECALBOXOS)' ==  'y' ]; then \
 			mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/; \
-			cp -r $(RASPLEX_PKGDIR)_resources/recalplex/* $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/; \
+			cp -r $(RASPLEX_PKGDIR)recalplex/* $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/; \
 			cp -r $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/addons/$(RASPLEX_SKIN_NAME)/* \
 				$(RASPLEX_SKIN_PATH)/$(RASPLEX_SKIN_NAME)/; \
 			mkdir -p $(RASPLEX_USER_PATH); \
 			cp -r $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/userdata/$(RASPLEX_SKIN_NAME)/* \
 				$(RASPLEX_USER_PATH)/; \
-			echo -e "$(RASPLEX_BUILD_BOOT_TXT)" >> $(RASPLEX_TRG_BUILD)/partition_setup.sh; \
+			cat $(RASPLEX_PKGDIR)noobs/partition_setup.txt >> $(RASPLEX_TRG_BUILD)/partition_setup.sh; \
 		fi; \
 	fi;
 endef
@@ -107,9 +98,9 @@ endef
 # 	POST_BUILD : Compress partitions directories into tar.xz
 #####################################################################
 define RASPLEX_POST_BUILD_CMDS
-	@for p in `ls -d $(RASPLEX_TAR_BUILD)/*/`; do \
+	for p in `ls -d $(RASPLEX_TAR_BUILD)/*/`; do \
 		pushd $$p > /dev/null; \
-		tar cfvJ $(RASPLEX_TRG_BUILD)/$$(basename $$p).tar.xz .; \
+		tar cfvJ $(RASPLEX_TRG_BUILD)/$$(basename $$p).tar.xz . --owner=0 --group=0; \
 		popd > /dev/null; \
 	done
 endef
@@ -125,7 +116,7 @@ RASPLEX_SRC_INSTALL=$(RASPLEX_TRG_BUILD)
 RASPLEX_TRG_INSTALL=$(TARGET_DIR)/os/$(RASPLEX_NAME)
 define RASPLEX_INSTALL_TARGET_CMDS
 	#$(call $(RASPLEX_INSTALL_NOOBS))
-	@if test -d $(RASPLEX_TRG_INSTALL); then \
+	if test -d $(RASPLEX_TRG_INSTALL); then \
 		rm -rf $(RASPLEX_TRG_INSTALL); \
 	fi; \
 	cp -r $(RASPLEX_SRC_INSTALL) $(RASPLEX_TRG_INSTALL);
