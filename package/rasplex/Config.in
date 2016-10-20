@@ -32,14 +32,6 @@ choice
     default BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
     depends on BR2_PACKAGE_RASPLEX
 
-config BR2_PACKAGE_RASPLEX_SKIN_OPENPHT
-    bool "OpenPHT - Standard"
-    help
-      No change is made on the skin configuration.
-     
-      Default OpenPHT Skin
-      http://www.rasplex.com/
-
 config BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
     bool "Aeon Nox 5 - Custom"
     help
@@ -54,5 +46,13 @@ config BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
       the classic Aeon feel.  Modified to run on Plex Home Theater.
       
       https://github.com/magnumdoomguy/skin.aeon.nox.5
+
+config BR2_PACKAGE_RASPLEX_SKIN_OPENPHT
+    bool "OpenPHT - Standard"
+    help
+      No change is made on the skin configuration.
+     
+      Default OpenPHT Skin
+      http://www.rasplex.com/
 
 endchoice
