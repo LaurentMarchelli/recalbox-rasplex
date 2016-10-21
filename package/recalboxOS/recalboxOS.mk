@@ -24,11 +24,12 @@ endif
 #####################################################################
 # 	EXTRACT : Extract base version and apply needed updates
 #####################################################################
-RECALBOXOS_SRC_BUILD=$(@D)/os/$(RECALBOXOS_NAME)-$(BR2_ARCH)
+RECALBOXOS_SRC_BUILD = $(@D)/os/$(RECALBOXOS_NAME)-$(BR2_ARCH)
 
 define RECALBOXOS_EXTRACT_CMDS
+	########## Extract base version ($(RECALBOXOS_RELEASE)) ##########
 	unzip -q -o $(DL_DIR)/$(RECALBOXOS_SOURCE) -d $(@D);
-	# Apply update patches
+	########## Apply version updates (boot & root) ##########
 	$(if $(RECALBOXOS_EXTRA_DOWNLOADS),\
 		mv $(DL_DIR)/boot.tar.xz $(RECALBOXOS_SRC_BUILD)/; \
 		mv $(DL_DIR)/root.tar.xz $(RECALBOXOS_SRC_BUILD)/; \
@@ -39,9 +40,10 @@ endef
 # 	CONFIGURE : Create noobs os directory for selected rpi
 # 	$(@D)/os/rasplex (Noobs configuration)
 #####################################################################
-RECALBOXOS_TRG_BUILD=$(@D)/os/$(RECALBOXOS_NAME)
+RECALBOXOS_TRG_BUILD = $(@D)/os/$(RECALBOXOS_NAME)
 
 define RECALBOXOS_CONFIGURE_CMDS
+	########## Create os/$(RECALBOXOS_NAME) for $(BR2_ARCH) ##########
 	rm -rf $(RECALBOXOS_TRG_BUILD); \
 	mkdir -p $(RECALBOXOS_TRG_BUILD); \
 	cp -r $(RECALBOXOS_SRC_BUILD)/* $(RECALBOXOS_TRG_BUILD)/; \
@@ -55,16 +57,21 @@ endef
 # 	PRE_BUILD : Prepare partition directories
 # 	$(@D)/os/rasplex.dsk/* (Partitions extracted)
 #####################################################################
-RECALBOXOS_TAR_BUILD=$(RECALBOXOS_TRG_BUILD).dsk
+RECALBOXOS_TAR_BUILD = $(RECALBOXOS_TRG_BUILD).dsk
+RECALBOXOS_PARTITIONS = root boot share
 
-RECALBOXOS_FILE_recalbox_conf=recalbox/share_init/system/recalbox.conf
+RECALBOXOS_PART_boot =
 
-RECALBOXOS_PART_boot=
-RECALBOXOS_PART_root=$(RECALBOXOS_FILE_recalbox_conf)
-RECALBOXOS_PART_share=
-RECALBOXOS_PARTITIONS=root boot share
+ifndef BR2_ARCH_POWERSWITCH_NONE
+	RECALBOXOS_FILE_recalbox_conf = ./recalbox/share_init/system/recalbox.conf
+	RECALBOXOS_PART_root += $(RECALBOXOS_FILE_recalbox_conf)
+endif
+ifdef BR2_PACKAGE_RECALPLEX
+	RECALBOXOS_PART_share = .keep
+endif
 
 define RECALBOXOS_PRE_BUILD_CMDS
+	########## Untar needed partitions for customization ##########
 	rm -rf $(RECALBOXOS_TAR_BUILD); \
 	$(foreach p, $(RECALBOXOS_PARTITIONS), \
 		$(if $(RECALBOXOS_PART_$(p)), \
@@ -72,7 +79,7 @@ define RECALBOXOS_PRE_BUILD_CMDS
 			pushd $(RECALBOXOS_TAR_BUILD)/$(p) > /dev/null; \
 			unxz -v $(RECALBOXOS_TRG_BUILD)/$(p).tar.xz; \
 			for f in $(RECALBOXOS_PART_$(p)); do \
-				tar xvf $(RECALBOXOS_TRG_BUILD)/$(p).tar ./$$f; \
+				tar xvf $(RECALBOXOS_TRG_BUILD)/$(p).tar $$f; \
 			done; \
 			popd > /dev/null; \
 		) \
@@ -83,7 +90,7 @@ endef
 # 	BUILD : Customize partition directories
 #####################################################################
 define RECALBOXOS_BUILD_POWER_CMD
-	# Powerswitch configuration
+	########## Apply Powerswitch configuration ##########
 	$(if $(BR2_ARCH_POWERSWITCH_REMOTEPI_2013), \
 		$(SED) "s|^.*\(system.power.switch\)\s*=\s*\(REMOTEPIBOARD_20[0-1]3\s*.*\)$$|\1=\2|g" \
 			$(RECALBOXOS_TAR_BUILD)/root/$(RECALBOXOS_FILE_recalbox_conf);\
@@ -94,22 +101,26 @@ define RECALBOXOS_BUILD_POWER_CMD
 	)
 endef
 
-define RECALBOXOS_BUILD_SKIN_CMD
-	# Customize noobs partition setup
-	$(if $(and $(BR2_PACKAGE_RASPLEX), $(BR2_PACKAGE_RASPLEX_SKIN_AEONNOX)), \
+define RECALBOXOS_BUILD_RECALPLEX_CMD
+	########## Apply Recalplex customization ############
+	$(if $(BR2_PACKAGE_RECALPLEX), \
+		cp -r $(RECALBOXOS_PKGDIR)partitions/share/* $(RECALBOXOS_TAR_BUILD)/share/; \
 		cat $(RECALBOXOS_PKGDIR)noobs/partition_setup.txt >> $(RECALBOXOS_TRG_BUILD)/partition_setup.sh; \
+		$(SED) "s|^\([[:blank:]]*\"empty_fs\"\)[[:blank:]]*:[[:blank:]]*\(true\).*|\1: false|g" \
+			$(RECALBOXOS_TRG_BUILD)/partitions.json; \
 	)
 endef
 
 define RECALBOXOS_BUILD_CMDS
 	$(call RECALBOXOS_BUILD_POWER_CMD)
-	$(call RECALBOXOS_BUILD_SKIN_CMD)
+	$(call RECALBOXOS_BUILD_RECALPLEX_CMD)
 endef
 
 #####################################################################
 # 	POST_BUILD : Update partitions tar files if needed
 #####################################################################
 define RECALBOXOS_POST_BUILD_CMDS
+	########## Update partition tar files ##########
 	$(foreach p, $(RECALBOXOS_PARTITIONS), \
 		$(if $(RECALBOXOS_PART_$(p)), \
 			pushd $(RECALBOXOS_TAR_BUILD)/$(p) > /dev/null; \
@@ -128,15 +139,15 @@ RECALBOXOS_POST_BUILD_HOOKS += RECALBOXOS_POST_BUILD_CMDS
 #	          to the target/os/recalboxOS
 #####################################################################
 ifeq ($(BR2_PACKAGE_NOOBS),y)
-	RECALBOXOS_DEPENDENCIES=noobs
-	RECALBOXOS_INSTALL_NOOBS=
+	RECALBOXOS_DEPENDENCIES = noobs
+	RECALBOXOS_INSTALL_NOOBS =
 else
-	RECALBOXOS_DEPENDENCIES=
-	RECALBOXOS_INSTALL_NOOBS=NOOBS_INSTALL_TARGET_CMDS
+	RECALBOXOS_DEPENDENCIES =
+	RECALBOXOS_INSTALL_NOOBS = NOOBS_INSTALL_TARGET_CMDS
 endif
 
-RECALBOXOS_SRC_INSTALL=$(RECALBOXOS_TRG_BUILD)
-RECALBOXOS_TRG_INSTALL=$(TARGET_DIR)/os/$(RECALBOXOS_NAME)
+RECALBOXOS_SRC_INSTALL = $(RECALBOXOS_TRG_BUILD)
+RECALBOXOS_TRG_INSTALL = $(TARGET_DIR)/os/$(RECALBOXOS_NAME)
 define RECALBOXOS_INSTALL_TARGET_CMDS
 	$(call $(RECALBOXOS_INSTALL_NOOBS))
 	rm -rf $(RECALBOXOS_TRG_INSTALL); \

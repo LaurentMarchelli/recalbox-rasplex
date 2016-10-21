@@ -21,6 +21,7 @@ RASPLEX_LICENSE_FILES = COPYING
 RASPLEX_TRG_BUILD=$(@D)/os/$(RASPLEX_NAME)
 
 define RASPLEX_CONFIGURE_CMDS
+	########## Create os/$(RECALBOXOS_NAME) for $(BR2_ARCH) ##########
 	rm -rf $(RASPLEX_TRG_BUILD); \
 	mkdir -p $(RASPLEX_TRG_BUILD); \
 	cp -r $(RASPLEX_PKGDIR)noobs/rpi/* $(RASPLEX_TRG_BUILD)/; \
@@ -36,6 +37,7 @@ RASPLEX_TAR_BUILD = $(RASPLEX_TRG_BUILD).dsk
 RASPLEX_PARTITIONS = plexboot plexdata
 
 define RASPLEX_PRE_BUILD_CMDS
+	########## Create tar directory for customization ##########
 	rm -rf $(RASPLEX_TAR_BUILD); \
 	mkdir -p $(RASPLEX_TAR_BUILD)/plexboot; \
 	cp -r $(@D)/3rdparty/bootloader/* $(RASPLEX_TAR_BUILD)/plexboot; \
@@ -50,7 +52,7 @@ endef
 #####################################################################
 RASPLEX_POWER_PATH = $(RASPLEX_TAR_BUILD)/plexdata/.cache/services
 define RASPLEX_BUILD_POWER_CMD
-	# Powerswitch configuration
+	########## Apply Powerswitch configuration ##########
 	$(if $(BR2_ARCH_POWERSWITCH_REMOTEPI_2013), \
 		mkdir -p $(RASPLEX_POWER_PATH); \
 		echo BOARD_VERSION=\"2013\" > $(RASPLEX_POWER_PATH)/remotepi-board.conf; \
@@ -74,7 +76,8 @@ ifdef BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
 endif
 
 define RASPLEX_BUILD_SKIN_CMD
-	$(if $(and $(BR2_PACKAGE_RECALBOXOS), $(BR2_PACKAGE_RASPLEX_SKIN_AEONNOX)), \
+	########## Apply Recalplex customization ############
+	$(if $(BR2_PACKAGE_RECALPLEX), \
 		# Unzip and customize rasplex skin 
 		mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/; \
 		unzip -q -o $(DL_DIR)/$(RASPLEX_SKIN_FILE) -d $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/; \
@@ -101,6 +104,7 @@ endef
 # 	POST_BUILD : Compress partitions directories into tar.xz
 #####################################################################
 define RASPLEX_POST_BUILD_CMDS
+	########## Create partition tar files ##########
 	$(foreach p, $(RASPLEX_PARTITIONS), \
 		pushd $(RASPLEX_TAR_BUILD)/$(p) > /dev/null; \
 		f=$(RASPLEX_TRG_BUILD)/$(p).tar; \
