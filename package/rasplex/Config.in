@@ -7,3 +7,52 @@ config BR2_PACKAGE_RASPLEX
       updates pushed out as they become available.
 
       http://www.rasplex.com
+
+#####################################################################
+#                       Version Selector
+#####################################################################
+choice
+    prompt "Version"
+    default BR2_PACKAGE_RASPLEX_STABLE
+    depends on BR2_PACKAGE_RASPLEX
+
+config BR2_PACKAGE_RASPLEX_STABLE
+    bool "1.6.2 - Stable"
+    help
+      The last stable version from : 
+      https://github.com/RasPlex/RasPlex/releases
+
+endchoice
+
+#####################################################################
+#                       Skin Selector
+#####################################################################
+choice
+    prompt "Custom Skin"
+    default BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
+    depends on BR2_PACKAGE_RASPLEX
+
+config BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
+    bool "Aeon Nox 5 - Custom"
+    help
+      Skin customized with a Recalbox Section to automatically reboot to 
+      Recalbox partiton.
+      
+      Aeon Nox for Plex Home Theater by MagnumDoomguy
+      
+      Aeon Nox 5 for Plex has 28 different viewtypes, an intuitive and
+      graceful GUI and lots of configuration options.
+      Completely redesigned to create a modern look, while retaining 
+      the classic Aeon feel.  Modified to run on Plex Home Theater.
+      
+      https://github.com/magnumdoomguy/skin.aeon.nox.5
+
+config BR2_PACKAGE_RASPLEX_SKIN_OPENPHT
+    bool "OpenPHT - Standard"
+    help
+      No change is made on the skin configuration.
+     
+      Default OpenPHT Skin
+      http://www.rasplex.com/
+
+endchoice

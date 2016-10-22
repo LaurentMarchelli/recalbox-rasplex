@@ -11,7 +11,7 @@
     {
       "label":                     "plexdata",
       "filesystem_type":           "ext4",
-      "partition_size_nominal":    512,
+      "partition_size_nominal":    1024,
       "want_maximised":            false,
       "uncompressed_tarball_size": 1,
       "mkfs_options":              ""

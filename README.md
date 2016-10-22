@@ -12,7 +12,8 @@ Recalbox-rasplex is a hack of Buildroot (https://buildroot.org/) using its scrip
   - v4.0.0-beta5 (default)
   - v4.0 last unstable build
   - v4.1 last unstable build
-- Rasplex v1.6.2
+- Rasplex (one of following) 
+  - v1.6.2
 
 ## System requirements
 Because recalbox-rasplex is made on Buildroot, it is designed to run on Linux Systems.
@@ -34,40 +35,57 @@ make menuconfig
 ```
 4 - Select your hardware (Target Architecture)
 ```
-- Raspberry Pi 1 Model B+
+- Raspberry Pi 3 Model B (default)
 - Raspberry Pi 2 Model B
-- Raspberry Pi 3 Model B
+- Raspberry Pi 1 Model B+
 ```
 5 - Select your Powerswitch hardware
 ```
-- None
+- RemotePi Board for Pi3, Pi 2 and B+ (default)
 - RemotePi Board 2013
-- RemotePi Board for Pi3, Pi 2 and B+
+- None
 ```
 Further informations at http://www.msldigital.com/
 
-6 - Select your Recalbox Version
+6 - Select your Rasplex Version
 ```
-- Version 4.0 - Stable
-- Version 4.0 - Unstable
-- Version 4.1 - Unstable
-- None
+- 1.6.2 - Stable (default)
 ```
-7 - Select further available options
 
-8 - Build NOOBS needed files
+7 - Select your Rasplex skin
+```
+- Aeon Nox 5 - Custom (default)
+- OpenPHT - Standard
+```
+
+8 - Select your Recalbox-OS Version
+```
+- 4.0 - Stable (default)
+- 4.0 - Unstable
+- 4.1 - Unstable
+```
+
+9 - Build NOOBS needed files
 ```bash
 make
 ```
-9 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
+10 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
 
-10 - Copy the content of the ./output/target directory into your SD-Card
+11 - Copy the content of the ./output/target directory into your SD-Card
 
-11 - Insert the SD-Card into the Raspberry Pi
+12 - Insert the SD-Card into the Raspberry Pi
 
-11 - Boot and select NOOBS options.
+13 - Boot and select NOOBS options.
 
 https://github.com/raspberrypi/noobs
+
+## How it works
+If you selected both Rasplex and Recalbox-OS and you choose the customized skin (Aeon Nox 5) :
+- On Rasplex, you will have a new button (section) to reboot on Recalbox-OS
+- On Recalbox-OS to reboot on Rasplex, just reboot.
+(If Recalbox updates are downloaded, it will reboot on Recalbox-OS to finish the update)
+
+If you selected both Rasplex and Recalbox-OS and you choose the standard skin (OpenPHT) you will have the noobs main menu to select which partittion you want to boot.
 
 ## Licenses
 ### BuildRoot 

@@ -1,0 +1,10 @@
+<settings>
+    <lookandfeel>
+        <skin>skin.aeon.nox.5</skin>
+    </lookandfeel>
+    <skinsettings>
+        <setting type="bool" name="skin.aeon.nox.5.CustomHomeBackground1">true</setting>
+        <setting type="string" name="skin.aeon.nox.5.CustomHomeBackground1Path">/storage/.recalplex/slideshow/</setting>
+        <setting type="string" name="skin.aeon.nox.5.CustomHomeBackground1Label">Recalbox</setting>
+    </skinsettings>
+</settings>
