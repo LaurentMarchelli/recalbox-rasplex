@@ -1,0 +1,7 @@
+
+		<item>
+		  <description>Recalbox</description>
+		  <label>Recalbox</label>
+		  <onclick>Plex.RunScript(/storage/.recalplex/autoboot_switch.py)</onclick>
+		</item>
+ 

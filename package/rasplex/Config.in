@@ -17,7 +17,7 @@ choice
     depends on BR2_PACKAGE_RASPLEX
 
 config BR2_PACKAGE_RASPLEX_STABLE
-    bool "1.6.2 - Stable"
+    bool "1.7.1 - Stable"
     help
       The last stable version from : 
       https://github.com/RasPlex/RasPlex/releases
@@ -29,8 +29,18 @@ endchoice
 #####################################################################
 choice
     prompt "Custom Skin"
-    default BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
+    default BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION
     depends on BR2_PACKAGE_RASPLEX
+
+config BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION
+    bool "Plex Black Edition Skin - Custom"
+    help
+      Skin customized with a Recalbox Section to automatically reboot to 
+      Recalbox partiton.
+      
+      Plex Black Edition by DeadEyeFlint
+      
+      https://forums.plex.tv/discussion/129756/release-plex-black-edition
 
 config BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
     bool "Aeon Nox 5 - Custom"
