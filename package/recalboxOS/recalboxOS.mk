@@ -3,11 +3,16 @@
 # recalboxos
 #
 ################################################################################
-RECALBOXOS_RELEASE = 4.0.0-beta5
+RECALBOXOS_RELEASE = 4.0.0-beta6
 RECALBOXOS_SOURCE = $(RECALBOXOS_NAME)-$(RECALBOXOS_RELEASE).zip
 RECALBOXOS_SITE = https://github.com/recalbox/recalbox-os/releases/download/$(RECALBOXOS_RELEASE)
 
-ifeq ($(BR2_PACKAGE_RECALBOXOS_UNSTABLE),y)
+ifeq ($(BR2_PACKAGE_RECALBOXOS_STABLE),y)
+	RECALBOXOS_VERSION = 4.0.0
+	RECALBOXOS_EXTRA_DOWNLOADS = \
+		http://archive.recalbox.com/4/$(BR2_ARCH)/stable/last/boot.tar.xz \
+		http://archive.recalbox.com/4/$(BR2_ARCH)/stable/last/root.tar.xz
+else ifeq ($(BR2_PACKAGE_RECALBOXOS_UNSTABLE),y)
 	RECALBOXOS_VERSION = 4.0-unstable
 	RECALBOXOS_EXTRA_DOWNLOADS = \
 		http://archive.recalbox.com/4/$(BR2_ARCH)/unstable/last/boot.tar.xz \
