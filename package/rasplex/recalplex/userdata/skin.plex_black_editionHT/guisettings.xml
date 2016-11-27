@@ -1,0 +1,9 @@
+<settings>
+    <lookandfeel>
+        <skin>skin.plex_black_editionHT</skin>
+    </lookandfeel>
+    <skinsettings>
+        <setting type="string" name="skin.plex_black_editionHT.RECALBOXMULTI">/storage/.recalplex/slideshow/</setting>
+        <setting type="string" name="skin.plex_black_editionHT.RECALBOXLABEL">RECALBOX</setting>
+    </skinsettings>
+</settings>
