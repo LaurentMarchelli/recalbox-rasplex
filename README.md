@@ -12,8 +12,9 @@ Recalbox-rasplex is a hack of Buildroot (https://buildroot.org/) using its scrip
   - v4.0.0 (default)
   - v4.0 last unstable build
   - v4.1 last unstable build
-- Rasplex (one of following) 
-  - v1.7.1
+- Rasplex (one of following)
+  - v1.6.2 (default)
+  - v1.7.1 Pre-release
 
 ## System requirements
 Because recalbox-rasplex is made on Buildroot, it is designed to run on Linux Systems.
@@ -49,7 +50,8 @@ Further informations at http://www.msldigital.com/
 
 6 - Select your Rasplex Version
 ```
-- 1.7.1 - Stable (default)
+- 1.6.2 - Stable (default)
+- 1.7.1 - Pre-release
 ```
 
 7 - Select your Rasplex skin
@@ -81,7 +83,7 @@ make
 https://github.com/raspberrypi/noobs
 
 ## How it works
-If you selected both Rasplex and Recalbox-OS and you choose the customized skin (Aeon Nox 5) :
+If you selected both Rasplex and Recalbox-OS and you choose a customized skin (Plex Black Edition or Aeon Nox 5) :
 - On Rasplex, you will have a new button (section) to reboot on Recalbox-OS
 - On Recalbox-OS to reboot on Rasplex, just reboot.
 (If Recalbox updates are downloaded, it will reboot on Recalbox-OS to finish the update)
