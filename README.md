@@ -22,7 +22,7 @@ If you are using an other system (Windows, Macosx) configuring a Linux Virtual M
 ## How to use
 1 - Install needed dependencies (e.g. Ubuntu)
 ```bash
-sudo apt-get -y install git libncurses-dev
+sudo apt-get -y install make gcc g++ python unzip bc git libncurses-dev
 ```
 2 - Get the sources :
 ```bash
