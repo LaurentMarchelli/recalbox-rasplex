@@ -3,9 +3,18 @@
 # rasplex
 #
 ################################################################################
-RASPLEX_RELEASE = 1.7.1
-OPENPHT_BUILD_NUMBER = 137
-OPENPHT_GIT_COMMIT = b604995c
+ifeq ($(BR2_PACKAGE_RASPLEX_PRERELEASE),y)
+	RASPLEX_RELEASE = 1.7.1
+	OPENPHT_BUILD_NUMBER = 137
+	OPENPHT_GIT_COMMIT = b604995c
+	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.7
+else
+	RASPLEX_RELEASE = 1.6.2
+	OPENPHT_BUILD_NUMBER = 123
+	OPENPHT_GIT_COMMIT = e23a7eef
+	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.6
+endif
+
 ifeq ($(BR2_ARCH),"rpi1")
 	RASPLEX_VERSION = $(RASPLEX_RELEASE).$(OPENPHT_BUILD_NUMBER)-$(OPENPHT_GIT_COMMIT)-RPi.arm
 else
@@ -67,25 +76,31 @@ endef
 
 # Skin configuration for AeonNox
 ifdef BR2_PACKAGE_RASPLEX_SKIN_AEONNOX
-	RASPLEX_SKIN_NAME = skin.aeon.nox.5
-	RASPLEX_SKIN_VERSION = 5.2.3
 	# URL information stored in /storage/.plexht/userdata/Database/Addons15.db
-	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.6
-	RASPLEX_SKIN_FILE = $(RASPLEX_SKIN_NAME)-$(RASPLEX_SKIN_VERSION).zip
-	# Download skin if required by configuration
-	RASPLEX_EXTRA_DOWNLOADS = \
-		$(RASPLEX_SKIN_SITE)/$(RASPLEX_SKIN_NAME)/$(RASPLEX_SKIN_FILE)
+	RASPLEX_SKIN_NAME = skin.aeon.nox.5
+	ifeq ($(BR2_PACKAGE_RASPLEX_PRERELEASE),y)
+		RASPLEX_SKIN_VERSION = 5.3.2
+	else
+		RASPLEX_SKIN_VERSION = 5.2.3
+	endif
 endif
 
 # Skin configuration for Plex Black Edition
 ifdef BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION
-	RASPLEX_SKIN_NAME = skin.plex_black_editionHT
-	RASPLEX_SKIN_VERSION = v16.11.24
 	# URL information stored in /storage/.plexht/userdata/Database/Addons15.db
-	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.6
-	RASPLEX_SKIN_FILE = HQlrwa
-	# Download skin if required by configuration
-	RASPLEX_EXTRA_DOWNLOADS = https://goo.gl/$(RASPLEX_SKIN_FILE)
+	RASPLEX_SKIN_NAME = skin.plex_black_editionHT
+	ifeq ($(BR2_PACKAGE_RASPLEX_PRERELEASE),y)
+		RASPLEX_SKIN_VERSION = 16.11.24
+	else
+		RASPLEX_SKIN_VERSION = 16.06.13
+	endif
+endif
+
+# Download skin if required by configuration
+ifdef RASPLEX_SKIN_NAME
+	RASPLEX_SKIN_FILE = $(RASPLEX_SKIN_NAME)-$(RASPLEX_SKIN_VERSION).zip
+	RASPLEX_EXTRA_DOWNLOADS = \
+		$(RASPLEX_SKIN_SITE)/$(RASPLEX_SKIN_NAME)/$(RASPLEX_SKIN_FILE)
 endif
 
 define RASPLEX_BUILD_SKIN_CMD
