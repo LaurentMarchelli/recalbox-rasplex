@@ -120,8 +120,21 @@ ifdef RASPLEX_SKIN_NAME
 		$(RASPLEX_SKIN_SITE)/$(RASPLEX_SKIN_NAME)/$(RASPLEX_SKIN_FILE)
 endif
 
+# Skin configuration for Plex Black Edition
+ifdef BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION
+	RASPLEX_SKIN_NAME = skin.plex_black_editionHT
+	RASPLEX_SKIN_VERSION = v16.11.24
+	# URL information stored in /storage/.plexht/userdata/Database/Addons15.db
+	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.6
+	RASPLEX_SKIN_FILE = $(RASPLEX_SKIN_NAME)-$(RASPLEX_SKIN_VERSION).zip
+	ZIP_NAME = HQlrwa
+	# # Download skin if required by configuration
+	RASPLEX_EXTRA_DOWNLOADS = https://goo.gl/HQlrwa
+endif
+
 define RASPLEX_BUILD_SKIN_CMD
 	########## Apply Recalplex customization ############
+
 	$(if $(BR2_PACKAGE_RECALPLEX), \
 		# Unzip rasplex skin for customization
 		mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/; \
@@ -152,6 +165,38 @@ define RASPLEX_BUILD_SKIN_CMD
 		cp $(RASPLEX_PKGDIR)recalplex/slideshow/* $(RASPLEX_TAR_BUILD)/plexdata/.recalplex/slideshow/ 2>/dev/null || : ; \
 		# Customize noobs partition setup
 		cat $(RASPLEX_PKGDIR)noobs/partition_setup.txt >> $(RASPLEX_TRG_BUILD)/partition_setup.sh; \
+
+
+		$(if $(BR2_PACKAGE_RASPLEX_SKIN_AEONNOX), \
+			# Unzip and customize rasplex skin 
+			mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/; \
+			unzip -q -o $(DL_DIR)/$(RASPLEX_SKIN_FILE) -d $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/; \
+			cp -r $(RASPLEX_PKGDIR)recalplex/addons/$(RASPLEX_SKIN_NAME)/* \
+				$(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/;
+		)
+
+		$(if $(BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION), \
+			mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME); \
+			unzip -q -o $(DL_DIR)/$(ZIP_NAME) -d $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/; \
+			# Customize theme
+			touch $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/Backgrounds.xml_
+			awk '/<!-- positioning grid -->/ { while(getline line<"$(RASPLEX_PKGDIR)recalplex/addons/$(RASPLEX_SKIN_NAME)/Backgrounds.xml.insert"){print line} }1' $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/Backgrounds.xml > "$(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/Backgrounds.xml_"
+			rm $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/Backgrounds.xml
+			mv $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/Backgrounds.xml_ $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/Backgrounds.xml
+			touch $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/IncludesHomeMenu.xml_
+			awk '/<item id="121">/ { while(getline line<"$(RASPLEX_PKGDIR)recalplex/addons/$(RASPLEX_SKIN_NAME)/IncludesHomeMenu.xml.insert"){print line} }1' $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/IncludesHomeMenu.xml > "$(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/IncludesHomeMenu.xml_"
+			rm $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/IncludesHomeMenu.xml
+			mv $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/IncludesHomeMenu.xml_ $(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/720p/IncludesHomeMenu.xml
+
+			# cp -r $(RASPLEX_PKGDIR)recalplex/addons/$(RASPLEX_SKIN_NAME)/* \
+			# 	$(RASPLEX_TAR_BUILD)/plexdata/.plexht/addons/$(RASPLEX_SKIN_NAME)/;
+		)
+		# Copy customized rasplex skin settings 
+		mkdir -p $(RASPLEX_TAR_BUILD)/plexdata/.plexht/userdata/; \
+		cp -r $(RASPLEX_PKGDIR)recalplex/userdata/$(RASPLEX_SKIN_NAME)/* \
+			$(RASPLEX_TAR_BUILD)/plexdata/.plexht/userdata/; \
+		cp -r $(RASPLEX_PKGDIR)recalplex/slideshow \
+		$(RASPLEX_TAR_BUILD)/plexdata/.recalplex/;
 	)
 endef
 
