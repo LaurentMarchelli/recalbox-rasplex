@@ -3,11 +3,28 @@
 # rasplex
 #
 ################################################################################
+
+
+ifeq ($(BR2_ARCH),"rpi1")
+	RASPLEX_VERSION = $(RASPLEX_RELEASE).$(OPENPHT_BUILD_NUMBER)-$(OPENPHT_GIT_COMMIT)-RPi.arm
+else
+	RASPLEX_VERSION = $(RASPLEX_RELEASE).$(OPENPHT_BUILD_NUMBER)-$(OPENPHT_GIT_COMMIT)-RPi2.arm
+endif
+RASPLEX_SOURCE = RasPlex-$(RASPLEX_VERSION).tar.gz
+RASPLEX_SITE = https://github.com/RasPlex/RasPlex/releases/download/$(RASPLEX_RELEASE)
+RASPLEX_LICENSE = GPL2
+RASPLEX_LICENSE_FILES = COPYING
+
+################################################################################
+#
+# rasplex
+#
+################################################################################
 ifeq ($(BR2_PACKAGE_RASPLEX_PRERELEASE),y)
-	RASPLEX_RELEASE = 1.7.1
-	OPENPHT_BUILD_NUMBER = 137
-	OPENPHT_GIT_COMMIT = b604995c
-	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.7
+	RASPLEX_RELEASE = 1.8.0
+	OPENPHT_BUILD_NUMBER = 148
+	OPENPHT_GIT_COMMIT = 573b6d73
+	RASPLEX_SKIN_SITE = https://addons.openpht.tv/openpht-1.8
 else
 	RASPLEX_RELEASE = 1.6.2
 	OPENPHT_BUILD_NUMBER = 123
@@ -90,7 +107,7 @@ ifdef BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION
 	# URL information stored in /storage/.plexht/userdata/Database/Addons15.db
 	RASPLEX_SKIN_NAME = skin.plex_black_editionHT
 	ifeq ($(BR2_PACKAGE_RASPLEX_PRERELEASE),y)
-		RASPLEX_SKIN_VERSION = 16.11.24
+		RASPLEX_SKIN_VERSION = 17.03.16
 	else
 		RASPLEX_SKIN_VERSION = 16.06.13
 	endif

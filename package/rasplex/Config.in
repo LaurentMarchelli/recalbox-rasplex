@@ -23,7 +23,7 @@ config BR2_PACKAGE_RASPLEX_STABLE
       https://github.com/RasPlex/RasPlex/releases
 
 config BR2_PACKAGE_RASPLEX_PRERELEASE
-    bool "1.7.1 - Pre-release"
+    bool "1.8.0 - Pre-release"
     help
       The last pre-release version from : 
       https://github.com/RasPlex/RasPlex/releases
