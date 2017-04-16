@@ -15,8 +15,8 @@ ifeq ($(BR2_PACKAGE_RECALBOXOS_UNSTABLE),y)
 else ifeq ($(BR2_PACKAGE_RECALBOXOS_NEXT),y)
 	RECALBOXOS_VERSION = 4.1-unstable
 	RECALBOXOS_EXTRA_DOWNLOADS = \
-		http://archive.recalbox.com/4.1/$(BR2_ARCH)/unstable/last/boot.tar.xz \
-		http://archive.recalbox.com/4.1/$(BR2_ARCH)/unstable/last/root.tar.xz
+		http://archive.recalbox.com/updates/v1.0/unstable/$(BR2_ARCH)/boot.tar.xz \
+		http://archive.recalbox.com/updates/v1.0/unstable/$(BR2_ARCH)/root.tar.xz
 else
 	RECALBOXOS_VERSION = $(RECALBOXOS_RELEASE)
 endif
