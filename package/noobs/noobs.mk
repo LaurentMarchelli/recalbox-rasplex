@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-NOOBS_VERSION = v2_0_0
-NOOBS_SOURCE = NOOBS_$(NOOBS_VERSION).zip
-NOOBS_SITE = https://downloads.raspberrypi.org/NOOBS/images/NOOBS-2016-10-05
+NOOBS_VERSION = v2_3
+NOOBS_SOURCE = NOOBS_lite_$(NOOBS_VERSION).zip
+NOOBS_SITE = https://downloads.raspberrypi.org/NOOBS_lite/images/NOOBS_lite-2017-03-03
 #NOOBS_SITE = https://downloads.raspberrypi.org/NOOBS_latest
 NOOBS_LICENSE = GPL2
 NOOBS_LICENSE_FILES = COPYING

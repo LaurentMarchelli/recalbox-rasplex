@@ -17,13 +17,13 @@ choice
     depends on BR2_PACKAGE_RASPLEX
 
 config BR2_PACKAGE_RASPLEX_STABLE
-    bool "1.6.2 - Stable"
+    bool "1.7.1 - Stable"
     help
       The last stable version from : 
       https://github.com/RasPlex/RasPlex/releases
 
 config BR2_PACKAGE_RASPLEX_PRERELEASE
-    bool "1.7.1 - Pre-release"
+    bool "1.8.0 - Pre-release"
     help
       The last pre-release version from : 
       https://github.com/RasPlex/RasPlex/releases
