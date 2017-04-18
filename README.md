@@ -10,8 +10,8 @@ Recalbox-rasplex is a hack of Buildroot (https://buildroot.org/) using its scrip
 - Noobs Lite v2.1
 - Recalbox-OS (one of following)
   - v4.0.1 (default)
-  - v4.0 last unstable build
-  - v4.1 last unstable build
+  - v4.0.x last unstable build
+  - v4.1.x last unstable build
 - Rasplex (one of following)
   - v1.6.2 (default)
   - v1.8.0 Pre-release
@@ -63,9 +63,9 @@ Further informations at http://www.msldigital.com/
 
 8 - Select your Recalbox-OS Version
 ```
-- 4.0 - Stable (default)
-- 4.0 - Unstable
-- 4.1 - Unstable
+- 4.0.1 - Stable (default)
+- 4.0.x - Unstable
+- 4.1.x - Unstable
 ```
 
 9 - Build NOOBS needed files

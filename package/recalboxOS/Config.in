@@ -18,13 +18,13 @@ choice
     depends on BR2_PACKAGE_RECALBOXOS
 
 config BR2_PACKAGE_RECALBOXOS_STABLE
-    bool "4.0 - Stable"
+    bool "4.0.1 - Stable"
     help
       The last stable version from : 
       https://github.com/recalbox/recalbox-os/releases
 
 config BR2_PACKAGE_RECALBOXOS_UNSTABLE
-    bool "4.0 - Unstable"
+    bool "4.0.x - Unstable"
     help
       The last stable version from : 
       https://github.com/recalbox/recalbox-os/releases 
@@ -34,7 +34,7 @@ config BR2_PACKAGE_RECALBOXOS_UNSTABLE
       Try it at your own risks !!!
 
 config BR2_PACKAGE_RECALBOXOS_NEXT
-    bool "4.1 - Unstable"
+    bool "4.1.x - Unstable"
     help
       The last stable version from : 
       https://github.com/recalbox/recalbox-os/releases 
