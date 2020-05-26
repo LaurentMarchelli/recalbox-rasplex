@@ -1,8 +1,9 @@
 source "package/noobs/Config.in"
 source "package/rasplex/Config.in"
-source "package/recalboxOS/Config.in"
+source "package/recalbox/Config.in"
 
 config BR2_PACKAGE_RECALPLEX
     bool
-    default BR2_PACKAGE_RASPLEX && (BR2_PACKAGE_RASPLEX_SKIN_AEONNOX || BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION) && \
-            BR2_PACKAGE_RECALBOXOS
+    default BR2_PACKAGE_RASPLEX &&  BR2_PACKAGE_RECALBOX && \
+      (BR2_PACKAGE_RASPLEX_SKIN_AEONNOX || \
+       BR2_PACKAGE_RASPLEX_SKIN_BLACK_EDITION)

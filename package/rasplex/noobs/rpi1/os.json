@@ -1,9 +1,9 @@
 {
   "name": "RasPlex",
   "url": "https://github.com/RasPlex/RasPlex/wiki",
-  "version": "1.0.3",
-  "release_date": "2016-02-29",
-  "kernel": "4.1.18",
+  "version": "1.8.0",
+  "release_date": "2017-03-20",
+  "kernel": "4.9.13",
   "description": "The Plex Home Theater port for the Raspberry Pi mini computer",
   "username": "root",
   "password": "rasplex",

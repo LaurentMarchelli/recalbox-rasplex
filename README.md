@@ -1,46 +1,47 @@
-# recalbox-rasplex
-NOOBS distribution with Recalbox and Rasplex
+# Recalplex
+NOOBS distribution with Recalbox and Rasplex (formerly called recalbox-rasplex)
 
 ## Presentation
-The aim of recalbox-rasplex is to produce a NOOBS distribution able to automatically install and configure at least Recalbox-OS (http://www.recalbox.com/) and RasPlex (http://www.rasplex.com/) systems on the same RaspberryPi SD card.  (https://www.raspberrypi.org/)
+The aim of Recalplex is to produce a NOOBS distribution able to automatically install and configure at least Recalbox (http://www.recalbox.com/) and RasPlex (http://www.rasplex.com/) systems on the same RaspberryPi SD card.  (https://www.raspberrypi.org/)
 
-Recalbox-rasplex is a hack of Buildroot (https://buildroot.org/) using its scripts to download, expand and configure existing system images for your hardware configuration. Unlike BuildRoot it does not build any system from sources, but get released images from NOOBS, Recalbox-OS and Rasplex update sites.
+Recalplex is a hack of Buildroot (https://buildroot.org/) using its scripts to download, expand and configure existing system images for your hardware configuration. Unlike BuildRoot it does not build any system from sources, but get released images from NOOBS, Recalbox and Rasplex update sites.
 
 ## Current version
 - Noobs Lite v2.1
-- Recalbox-OS (one of following)
-  - v4.0.1 (default)
-  - v4.0.x last unstable build
-  - v4.1.x last unstable build
-- Rasplex (one of following)
-  - v1.6.2 (default)
-  - v1.8.0 Pre-release
+- Recalbox 6.1.1-Dragonblaze (Latest)
+- Rasplex 1.8.0-148 (Latest)
+  - Aeon Nox 5.4.0 (Latest)
 
 ## System requirements
-Because recalbox-rasplex is made on Buildroot, it is designed to run on Linux Systems.
-If you are using an other system (Windows, Macosx) configuring a Linux Virtual Machine could be a good option. (https://www.virtualbox.org/)
+Because Recalplex is made on Buildroot, it is designed to run on Linux Systems.
+If may run on WLS (Windows Linux Subsystem) without any waranty; any feedback is welcome.
+However, if you are using an other system (Windows, Macosx) configuring a Linux Virtual Machine could be a good option. (https://www.virtualbox.org/)
 
 ## How to use
-1 - Install needed dependencies (e.g. Ubuntu)
+01 - Install needed dependencies (e.g. Ubuntu)
 ```bash
 sudo apt-get -y install make gcc g++ python unzip bc git libncurses-dev xz-utils
 ```
-2 - Get the sources :
+
+02 - Get the sources :
 ```bash
-git clone --recursive https://github.com/LaurentMarchelli/recalbox-rasplex.git
+git clone --recursive https://gitlab.com/recalplex/recalplex.git
 ```
-3 - Configure recalbox-rasplex
+
+03 - Configure Recalplex
 ```bash
-cd recalbox-rasplex
+cd recalplex
 make menuconfig
 ```
-4 - Select your hardware (Target Architecture)
+
+04 - Select your hardware (Target Architecture)
 ```
 - Raspberry Pi 3 Model B (default)
 - Raspberry Pi 2 Model B
 - Raspberry Pi 1 Model B+
 ```
-5 - Select your Powerswitch hardware
+
+05 - Select your Powerswitch hardware
 ```
 - RemotePi Board for Pi3, Pi 2 and B+ (default)
 - RemotePi Board 2013
@@ -48,47 +49,35 @@ make menuconfig
 ```
 Further informations at http://www.msldigital.com/
 
-6 - Select your Rasplex Version
-```
-- 1.6.2 - Stable (default)
-- 1.8.0 - Pre-release
-```
-
-7 - Select your Rasplex skin
+06 - Select your Rasplex skin
 ```
 - Plex Black Edition Skin - Custom (default)
 - Aeon Nox 5 - Custom
 - OpenPHT - Standard
 ```
 
-8 - Select your Recalbox-OS Version
-```
-- 4.0.1 - Stable (default)
-- 4.0.x - Unstable
-- 4.1.x - Unstable
-```
-
-9 - Build NOOBS needed files
+07 - Build NOOBS needed files
 ```bash
 make
 ```
-10 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
 
-11 - Copy the content of the ./output/target directory into your SD-Card
+08 - Format a SD-Card with a unique Fat-32 bits partition in a msdos partition table
 
-12 - Insert the SD-Card into the Raspberry Pi
+09 - Copy the content of the ./output/target directory into your SD-Card
 
-13 - Boot and select NOOBS options.
+10 - Insert the SD-Card into the Raspberry Pi
+
+11 - Boot and select NOOBS options.
 
 https://github.com/raspberrypi/noobs
 
 ## How it works
-If you selected both Rasplex and Recalbox-OS and you choose a customized skin (Plex Black Edition or Aeon Nox 5) :
-- On Rasplex, you will have a new button (section) to reboot on Recalbox-OS
-- On Recalbox-OS to reboot on Rasplex, just reboot.
-(If Recalbox updates are downloaded, it will reboot on Recalbox-OS to finish the update)
+If you selected both Rasplex and Recalbox and you choose a customized skin (Plex Black Edition or Aeon Nox 5) :
+- On Rasplex, you will have a new button (section) to reboot on Recalbox
+- On Recalbox to reboot on Rasplex, just reboot.
+(If Recalbox updates are downloaded, it will reboot on Recalbox to finish the update)
 
-If you selected both Rasplex and Recalbox-OS and you choose the standard skin (OpenPHT) you will have the noobs main menu to select which partittion you want to boot.
+If you selected both Rasplex and Recalbox and you choose the standard skin (OpenPHT) you will have the noobs main menu to select which partittion you want to boot.
 
 ## Licenses
 ### BuildRoot 
@@ -109,14 +98,17 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 https://github.com/raspberrypi/noobs
 
-### Recalbox-OS
-License Redistribution and use of the RECALBOX code or any derivative works are permitted provided that the following conditions are met:
+### Recalbox
 
-Redistributions may not be sold without authorization, nor may they be used in a commercial product or activity. Redistributions that are modified from the original source must include the complete source code, including the source code for all components used by a binary built from the modified sources.
+Redistribution and use of the RECALBOX code or any derivative works are permitted provided that the following conditions are met:
 
-Redistributions must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+* Redistributions may not be sold without authorization, nor may they be used in a commercial product or activity.
+* Redistributions that are modified from the original source must include the complete source code, including the source code for all components used by a binary built from the modified sources.
+* Redistributions must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
-https://github.com/recalbox/recalbox-os/blob/master/LICENCE.md
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+https://gitlab.com/recalbox/recalbox/-/blob/master/LICENSE.md
 
 ## Rasplex / OpenELEC
 GNU GENERAL PUBLIC LICENSE Version 2, June 1991
