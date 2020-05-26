@@ -1,5 +1,5 @@
 config BR2_PACKAGE_NOOBS
-    bool "Noobs"
+    bool "Noobs 2.1"
     default y
     help
       NOOBS is an easy operating system installer which contains Raspbian. 

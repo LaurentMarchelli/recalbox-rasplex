@@ -1,6 +1,7 @@
 config BR2_PACKAGE_RASPLEX
-    bool "Rasplex"
+    bool "Rasplex 1.8.0-148 - Latest"
     default y
+    depends on BR2_PACKAGE_NOOBS
     help
       The Plex Home Theater port for the Raspberry Pi mini computer.
       Created from Plex Home Theater and OpenELEC Linux, with automatic 
@@ -11,34 +12,28 @@ config BR2_PACKAGE_RASPLEX
 #####################################################################
 #                       Version Selector
 #####################################################################
-choice
-    prompt "Version"
-    default BR2_PACKAGE_RASPLEX_STABLE
-    depends on BR2_PACKAGE_RASPLEX
+# choice
+#     prompt "Version"
+#     default BR2_PACKAGE_RASPLEX_STABLE
+#     depends on BR2_PACKAGE_RASPLEX
 
-config BR2_PACKAGE_RASPLEX_STABLE
-    bool "1.6.2 - Stable"
-    help
-      The last stable version from : 
-      https://github.com/RasPlex/RasPlex/releases
+# config BR2_PACKAGE_RASPLEX_STABLE
+#     bool "1.8.0 - Latest"
+#     help
+#       The last stable version from : 
+#       https://github.com/RasPlex/RasPlex/releases
 
-config BR2_PACKAGE_RASPLEX_PRERELEASE
-    bool "1.8.0 - Pre-release"
-    help
-      The last pre-release version from : 
-      https://github.com/RasPlex/RasPlex/releases
-
-endchoice
+# endchoice
 
 #####################################################################
 #                       Skin Selector
 #####################################################################
 choice
     prompt "Custom Skin"
-    default BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION
+    default BR2_PACKAGE_RASPLEX_SKIN_BLACK_EDITION
     depends on BR2_PACKAGE_RASPLEX
 
-config BR2_PACKAGE_RASPLEX_SKIN_PLEX_BLACK_EDITION
+config BR2_PACKAGE_RASPLEX_SKIN_BLACK_EDITION
     bool "Plex Black Edition Skin - Custom"
     help
       Skin customized with a Recalbox Section to automatically reboot to 

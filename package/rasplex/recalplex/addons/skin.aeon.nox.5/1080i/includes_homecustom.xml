@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-   <include name="Home_CustomItems">
-      <item>
-         <description>Recalbox</description>
-         <label>Recalbox</label>
-         <onclick>Plex.RunScript(/storage/.recalplex/autoboot_switch.py)</onclick>
-      </item>
-      <!-- Sample Custom Script Item -->
-      <item>
-         <label>Type Name as it will appear in the menu here.</label>
-         <onclick>Plex.RunScript(Path and Filename of the Custom Script Here)</onclick>
-         <visible>false</visible>
-      </item>
-   </include>
+  <include name="CustomFanart">
+    <control type="group">
+      <visible>[Control.HasFocus(300) | Control.HasFocus(9027)]</visible>
+      <control type="multiimage">
+        <visible>String.IsEqual(Container(300).ListItem.Label,Recalbox)</visible>
+        <include>FanartCommonValues</include>
+        <imagepath>/storage/.recalplex/slideshow/</imagepath>
+      </control>
+    </control>
+  </include>
+  <include name="Home_CustomItems">
+    <item>
+      <description>Recalbox</description>
+      <label>Recalbox</label>
+      <onclick>Plex.RunScript(/storage/.recalplex/autoboot_switch.py)</onclick>
+    </item>
+  </include>
 </includes>
-
-

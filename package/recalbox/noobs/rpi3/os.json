@@ -1,0 +1,12 @@
+{
+  "name": "Recalbox",
+  "version": "v6.1.1",
+  "release_date": "2019-11-13",
+  "kernel": "4.14.62-v7",
+  "description": "The recalbox operating system for rpi3.",
+  "url": "http://www.recalbox.com/",
+  "supported_hex_revisions": "2082",
+  "supported_models": [
+    "Pi 3"
+   ]
+}
